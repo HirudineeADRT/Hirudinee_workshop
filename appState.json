@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "Hirudinee_workshop/rekognizer.js",
-        "code": "const  AWS = require('aws-sdk');\nconst rekog = new AWS.Rekognition();\n\nexports.handler = function(event, context, callback) {\n    //console.log(event)\n    let s3 = event.Records[0].s3;\n    rekog.detectLabels({\n        Image: {\n            S3Object: {\n                Bucket: s3.bucket.name,\n                Name:  s3.object.key\n            }\n        },\n        MaxLabels: 1\n    }).promise()\n    .then(data => {\n        console.log(data);\n        callback(null, {});\n    })\n    .catch(callback);\n\n\n    //callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "code": "const AWS = require('aws-sdk');\nconst ddb = new AWS.DynamoDB.DocumentClient();\nconst rekog = new AWS.Rekognition();\n\nexports.handler = function (event, context, callback) {\n    //console.log(event)\n    let s3 = event.Records[0].s3;\n    rekog.detectLabels({\n        Image: {\n            S3Object: {\n                Bucket: s3.bucket.name,\n                Name: s3.object.key\n            }\n        },\n        MaxLabels: 1\n    }).promise()\n        .then(data => {\n            console.log(data);\n            //callback(null, {});\n            if (!data.Labels || data.Labels.length < 1) {\n                callback(null, {});\n                return;\n            }\n            let lbl = data.Labels[0];\n            console.log(lbl.Name)\n        })\n        .catch(callback);\n\n    ddb.put({\n        TableName: 'hirutest',\n        Item: { 'lable': lbl.Name, 'name': s3.object.key }\n    }).promise()\n        .then((data) => {\n            callback(null, {});\n        })\n        .catch((err) => {\n            console.log(err)\n        });\n\n\n    //callback(null, {\"message\": \"Successfully executed\"});\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -46,6 +46,12 @@
             "name": "Unnamed event",
             "functionId": "d126e32b-25e1-4c00-bdea-6201309e7095",
             "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+          },
+          "70d1bfd2-e288-418c-9f39-9ad6d79e107d": {
+            "id": "70d1bfd2-e288-418c-9f39-9ad6d79e107d",
+            "name": "Unnamed event",
+            "functionId": "d126e32b-25e1-4c00-bdea-6201309e7095",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
           }
         },
         "customSecurityPolicy": {
@@ -53,9 +59,10 @@
           "Statement": [
             {
               "Effect": "Allow",
-              "Resource": "arn:aws:rekognition:us-east-2::",
+              "Resource": "*",
               "Action": [
-                "rekognition:DetectLabels"
+                "rekognition:DetectLabels",
+                "*"
               ]
             }
           ]
@@ -79,6 +86,40 @@
             "name": "hiru.test01"
           }
         }
+      },
+      "ddbhirutest": {
+        "name": "ddbhirutest",
+        "type": "DynamoDB",
+        "config": {
+          "mode": 0,
+          "operation": "put",
+          "table": {
+            "arn": "",
+            "name": "hirutest",
+            "partitionKey": "name",
+            "partitionKeyType": "S",
+            "hasSortKey": true,
+            "sortKey": "lable",
+            "sortKeyType": "S",
+            "payPerRequest": true,
+            "mode": 0
+          },
+          "isGlobalEditMode": false,
+          "parameters": {
+            "Key": {},
+            "Item": {
+              "lable": "@{lbl.Name}",
+              "name": "@{s3.object.key}"
+            },
+            "ExpressionAttributeValues": {}
+          },
+          "triggerParams": {},
+          "validator": {
+            "validatableFields": {},
+            "validity": true
+          },
+          "valid": true
+        }
       }
     },
     "customTemplate": {
@@ -99,8 +140,10 @@
       "dependencies": {
         "aws-sdk": {
           "name": "aws-sdk",
-          "version": "2.563.0",
-          "language": "javascript"
+          "language": "javascript",
+          "version": "2.176.0",
+          "dev": true,
+          "notRemovable": false
         }
       }
     }
@@ -112,7 +155,7 @@
     "projectRegion": "us-east-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1572941778595
+    "lastSave": 1572945489579
   },
   "VCS_STATE": {
     "provider": "GitHub",
