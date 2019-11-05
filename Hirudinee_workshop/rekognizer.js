@@ -20,5 +20,5 @@ exports.handler = function(event, context, callback) {
     .catch(callback);
 
 
-    callback(null, {"message": "Successfully executed"});
+    //callback(null, {"message": "Successfully executed"});
 }
