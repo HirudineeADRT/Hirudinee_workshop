@@ -2,8 +2,8 @@ const  AWS = require('aws-sdk');
 const rekog = new AWS.Rekognition();
 
 exports.handler = function(event, context, callback) {
-    console.log(event)
-let s3 = event.Records[0].s3;
+    //console.log(event)
+    let s3 = event.Records[0].s3;
     rekog.detectLabels({
         Image: {
             S3Object: {

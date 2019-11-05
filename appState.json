@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "Hirudinee_workshop/rekognizer.js",
-        "code": "const  AWS = require('aws-sdk');\nconst rekog = new AWS.Rekognition();\n\nexports.handler = function(event, context, callback) {\n    console.log(event)\nlet s3 = event.Records[0].s3;\n    rekog.detectLabels({\n        Image: {\n            S3Object: {\n                Bucket: s3.bucket.name,\n                Name:  s3.object.key\n            }\n        },\n        MaxLabels: 1\n    }).promise()\n    .then(data => {\n        console.log(data);\n        callback(null, {});\n    })\n    .catch(callback);\n\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "code": "const  AWS = require('aws-sdk');\nconst rekog = new AWS.Rekognition();\n\nexports.handler = function(event, context, callback) {\n    //console.log(event)\n    let s3 = event.Records[0].s3;\n    rekog.detectLabels({\n        Image: {\n            S3Object: {\n                Bucket: s3.bucket.name,\n                Name:  s3.object.key\n            }\n        },\n        MaxLabels: 1\n    }).promise()\n    .then(data => {\n        console.log(data);\n        callback(null, {});\n    })\n    .catch(callback);\n\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -100,7 +100,7 @@
     "projectRegion": "us-east-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1572940549497
+    "lastSave": 1572941074774
   },
   "VCS_STATE": {
     "provider": "GitHub",
