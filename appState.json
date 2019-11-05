@@ -1,0 +1,108 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "2944c59b-6785-42c9-bb4c-6a6168c8adfe": {
+        "id": "2944c59b-6785-42c9-bb4c-6a6168c8adfe",
+        "parent": null,
+        "name": "Hirudinee_workshop",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "d126e32b-25e1-4c00-bdea-6201309e7095"
+        ],
+        "isRemovable": false,
+        "filePath": "Hirudinee_workshop"
+      },
+      "d126e32b-25e1-4c00-bdea-6201309e7095": {
+        "id": "d126e32b-25e1-4c00-bdea-6201309e7095",
+        "parent": "2944c59b-6785-42c9-bb4c-6a6168c8adfe",
+        "name": "rekognizer.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "Hirudinee_workshop/rekognizer.js",
+        "code": "exports.handler = function(event, context, callback) {\n    console.log(event)\n\n\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "s3hirutest01",
+            "config": {
+              "type": "s3:ObjectCreated:*",
+              "keyPrefix": "",
+              "keySuffix": ""
+            }
+          }
+        ],
+        "testCases": {
+          "2d28b8cc-93b2-45f2-b205-ad288552b0b2": {
+            "id": "2d28b8cc-93b2-45f2-b205-ad288552b0b2",
+            "name": "Unnamed event",
+            "functionId": "d126e32b-25e1-4c00-bdea-6201309e7095",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+          }
+        }
+      }
+    },
+    "deletedFiles": [
+      "Hirudinee_workshop/lambda.js"
+    ],
+    "rootNode": "2944c59b-6785-42c9-bb4c-6a6168c8adfe",
+    "openFiles": [
+      "d126e32b-25e1-4c00-bdea-6201309e7095"
+    ],
+    "currentFileId": "d126e32b-25e1-4c00-bdea-6201309e7095",
+    "resources": {
+      "s3hirutest01": {
+        "name": "s3hirutest01",
+        "type": "S3",
+        "config": {
+          "mode": 1,
+          "bucket": {
+            "region": "us-east-2",
+            "name": "hiru.test01"
+          }
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {}
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "Hirudinee_workshop",
+    "projectDescription": "",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-2",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1572939853106
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "Hirudinee_workshop",
+      "url": "https://github.com/HirudineeADRT/Hirudinee_workshop"
+    }
+  }
+}
