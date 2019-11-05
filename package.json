@@ -1,6 +1,8 @@
 {
   "name": "Hirudinee_workshop",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "aws-sdk": "2.563.0"
+  },
   "devDependencies": {}
 }

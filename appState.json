@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "Hirudinee_workshop/rekognizer.js",
-        "code": "exports.handler = function(event, context, callback) {\n    console.log(event)\n\n\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "code": "const  AWS = require('aws-sdk');\nconst rekog = new AWS.Rekognition();\n\nexports.handler = function(event, context, callback) {\n    console.log(event)\nlet s3 = event.Records[0].s3;\n    rekog.detectLabels({\n        Image: {\n            S3Object: {\n                Bucket: s3.bucket.name,\n                Name:  s3.object.key\n            }\n        },\n        MaxLabels: 1\n    }).promise()\n    .then(data => {\n        console.log(data);\n        callback(null, {});\n    })\n    .catch(callback);\n\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -50,9 +50,7 @@
         }
       }
     },
-    "deletedFiles": [
-      "Hirudinee_workshop/lambda.js"
-    ],
+    "deletedFiles": [],
     "rootNode": "2944c59b-6785-42c9-bb4c-6a6168c8adfe",
     "openFiles": [
       "d126e32b-25e1-4c00-bdea-6201309e7095"
@@ -86,7 +84,13 @@
       }
     ],
     "packageJSON": {
-      "dependencies": {}
+      "dependencies": {
+        "aws-sdk": {
+          "name": "aws-sdk",
+          "version": "2.563.0",
+          "language": "javascript"
+        }
+      }
     }
   },
   "PROJECT_META": {
@@ -96,7 +100,7 @@
     "projectRegion": "us-east-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1572939853106
+    "lastSave": 1572940549497
   },
   "VCS_STATE": {
     "provider": "GitHub",
